@@ -12,49 +12,10 @@ from pygame.math import Vector2
 import audio
 import settings as S
 from ui import UI
-from world import World
-
-BASE_DIR = Path(__file__).resolve().parent
-STATE_TITLE = "title"
-STATE_PLAYING = "playing"
-STATE_PAUSED = "paused"
-STATE_GAMEOVER = "gameover"
-
-
-def load_best() -> int:
-    try:
-        with open(BASE_DIR / S.HIGHSCORE_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return max(0, int(data.get("best", 0)))
-    except (OSError, ValueError, TypeError, json.JSONDecodeError):
-        return 0
-
-
-def save_best(value: int):
-    try:
-        with open(BASE_DIR / S.HIGHSCORE_FILE, "w", encoding="utf-8") as f:
-            json.dump({"best": int(value)}, f)
     except OSError:
         pass
 
 
-class Game:
-    def __init__(self):
-        self.screen = pygame.display.set_mode((S.WIDTH, S.HEIGHT))
-        pygame.display.set_caption(S.CAPTION)
-        pygame.display.set_icon(self._make_icon())
-
-        self.world_surface = pygame.Surface((S.WIDTH, S.HEIGHT))
-        self.world = World()
-        self.ui = UI()
-
-        self.state = STATE_TITLE
-        self.best = load_best()
-        self.new_record = False
-        self.ui_time = 0.0
-        self.mouse_pos = pygame.mouse.get_pos()
-        self.running = True
-        self.clock = pygame.time.Clock()
         self._cursor_hidden = False
 
     @staticmethod
